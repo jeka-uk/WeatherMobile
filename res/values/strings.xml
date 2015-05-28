@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">WeatherMobile</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="temp">Temperature:</string>
+    <string name="countryName">Country Name:</string>
+    <string name="wind">Wind:</string>
+    <string name="pressure">Pressure:</string>
+    <string name="humidity">Humidity:</string>
+    <string name="countryName_hint">Input Country </string>
+    
+    <string name="grad">C</string>
+    <string name="pres">hPa</string>
+    <string name="win">mps</string>
+    <string name="hum">%</string>
+    
+    
+
+</resources>
