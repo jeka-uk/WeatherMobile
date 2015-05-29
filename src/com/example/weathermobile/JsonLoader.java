@@ -6,7 +6,7 @@ import android.support.v4.content.AsyncTaskLoader;
 public class JsonLoader extends AsyncTaskLoader<String> {
 
 	private String nameCountry;
-	
+
 	public static String NAME_COUNTRY = "name";
 
 	public JsonLoader(Context context, String nameCountry) {
