@@ -16,6 +16,8 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.Loader;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivityFragment extends Fragment implements OnKeyListener {
+public class MainActivityFragment extends Fragment implements OnKeyListener, LoaderCallbacks<String> {
 
 	private static final String LOG_TAG = "myLogs";
 
@@ -73,7 +75,7 @@ public class MainActivityFragment extends Fragment implements OnKeyListener {
 		countryName_TextView = (EditText) view.findViewById(R.id.countryName_TextView);
 		countryName_TextView.setOnKeyListener(this);
 		humidity_TextView = (TextView) view.findViewById(R.id.humidity_TextView);
-
+		
 		return view;
 	}
 
@@ -98,8 +100,8 @@ public class MainActivityFragment extends Fragment implements OnKeyListener {
 				nameCountry = countryName_TextView.getText().toString();
 
 				InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-				inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-						InputMethodManager.HIDE_NOT_ALWAYS);
+				inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+				
 				break;
 			}
 			return true;
@@ -108,20 +110,41 @@ public class MainActivityFragment extends Fragment implements OnKeyListener {
 	}
 
 	private void isNetworkConnected() {
+		
 		ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo ni = cm.getActiveNetworkInfo();
+		
 		if (ni == null) {
-
 			showMessage("No internet connection");
 
 		} else {
 
 			new WeatherTask().execute();
+			
+			//getLoaderManager().initLoader(Constants.LOADER_TIME_ID, null, this).forceLoad();
 		}
 	}
 
 	public void showMessage(String message) {
 		Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public Loader<String> onCreateLoader(int arg0, Bundle arg1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void onLoadFinished(Loader<String> arg0, String arg1) {
+		// TODO Auto-generated method stub
+		temp_TextView.setText(arg1);
+	}
+
+	@Override
+	public void onLoaderReset(Loader<String> arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
