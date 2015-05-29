@@ -1,5 +1,6 @@
 package com.example.weathermobile;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -7,34 +8,29 @@ import android.location.Location;
 
 public class JsonHandler {
 
-	public Location jsCoord(JSONObject jObj) throws JSONException {
-		Location location = new Location("wethaer");
-		JSONObject coordObj = getObject("coord", jObj);
-		location.setLatitude(getFloat("lat", coordObj));
-		location.setLongitude(getFloat("lon", coordObj));
+	public double getDoubleSubObj(JSONObject jObj, String namesubObj, String key)
+			throws JSONException {
 
-		return location;
+		double result = jObj.getJSONObject(namesubObj).getDouble(key);
+
+		return result;
 	}
 
-	public static JSONObject getObject(String tagName, JSONObject jObj)
+	public String getStringArrey(JSONObject jObj, String nameArrey, String key)
 			throws JSONException {
-		JSONObject subObj = jObj.getJSONObject(tagName);
-		return subObj;
+
+		String result = jObj.getJSONArray(nameArrey).getJSONObject(0)
+				.getString(key);
+
+		return result;
 	}
 
-	public static float getFloat(String tagName, JSONObject jObj)
+	public double getDoubleObj(JSONObject jObj, String key)
 			throws JSONException {
-		return (float) jObj.getDouble(tagName);
-	}
 
-	public static String getString(String tagName, JSONObject jObj)
-			throws JSONException {
-		return jObj.getString(tagName);
-	}
+		double result = jObj.getDouble(key);
 
-	public static int getInt(String tagName, JSONObject jObj)
-			throws JSONException {
-		return jObj.getInt(tagName);
+		return result;
 	}
 
 }

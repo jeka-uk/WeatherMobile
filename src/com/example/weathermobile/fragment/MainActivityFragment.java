@@ -1,8 +1,6 @@
 package com.example.weathermobile.fragment;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,9 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-
-public class MainActivityFragment extends Fragment implements OnKeyListener, LoaderCallbacks<String> {
+public class MainActivityFragment extends Fragment implements OnKeyListener {
 
 	private static final String LOG_TAG = "myLogs";
 
@@ -47,8 +43,6 @@ public class MainActivityFragment extends Fragment implements OnKeyListener, Loa
 	private JsonHandler mJsonHandler = new JsonHandler();
 	private static String ICON_URL = "http://openweathermap.org/img/w/";
 	static final int LOADER_TIME_ID = 1;
-	
-	
 
 	private class WeatherTask extends AsyncTask<Void, Void, String> {
 
@@ -64,7 +58,7 @@ public class MainActivityFragment extends Fragment implements OnKeyListener, Loa
 
 			try {
 
-				jsonParsing(new JSONObject(strJson));
+				setData(new JSONObject(strJson));
 
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -88,42 +82,26 @@ public class MainActivityFragment extends Fragment implements OnKeyListener, Loa
 		countryName_TextView.setOnKeyListener(this);
 		humidity_TextView = (TextView) view
 				.findViewById(R.id.humidity_TextView);
-		
-		Bundle bndl = new Bundle();
-		bndl.putString(JsonLoader.NAME_COUNTRY, nameCountry);
-		getLoaderManager().initLoader(LOADER_TIME_ID, bndl, this);
+
 		return view;
 	}
 
-	private void jsonParsing(JSONObject jObj) throws JSONException {
+	private void setData(JSONObject jObj) throws JSONException {
 
-		JSONObject coordObj = mJsonHandler.getObject("coord", jObj);
-		// sys
-		JSONObject sysObj = mJsonHandler.getObject("sys", jObj);
-		// weather
-		JSONArray jArr = jObj.getJSONArray("weather");
-		JSONObject JSONWeather = jArr.getJSONObject(0);
-		// main
-		JSONObject mainObj = mJsonHandler.getObject("main", jObj);
-		// Wind
-		JSONObject wObj = mJsonHandler.getObject("wind", jObj);
-		// Clouds
-		JSONObject cObj = mJsonHandler.getObject("clouds", jObj);
-		// (getInt("all", cObj))
-
-		temp_TextView.setText(String.valueOf(dec.format(mJsonHandler.getFloat(
-				"temp", mainObj) - 273.15)) + " " + getString(R.string.grad));
-
-		pressure_TextView.setText(String.valueOf(mJsonHandler.getInt(
-				"pressure", mainObj)) + " " + getString(R.string.pres));
-		wind_TextView.setText(String.valueOf(mJsonHandler.getFloat("speed",
-				wObj)) + " " + getString(R.string.win));
-		humidity_TextView.setText(String.valueOf(mJsonHandler.getInt(
-				"humidity", mainObj)) + " " + getString(R.string.hum));
+		temp_TextView.setText(String.valueOf(dec.format(mJsonHandler
+				.getDoubleSubObj(jObj, "main", "temp") - 273.15))
+				+ " "
+				+ getString(R.string.grad));
+		wind_TextView.setText(String.valueOf(mJsonHandler.getDoubleSubObj(jObj,
+				"wind", "speed")) + " " + getString(R.string.win));
+		pressure_TextView.setText(String.valueOf(mJsonHandler.getDoubleSubObj(
+				jObj, "main", "pressure")) + " " + getString(R.string.pres));
+		humidity_TextView.setText(String.valueOf(mJsonHandler.getDoubleSubObj(
+				jObj, "main", "humidity")) + " " + getString(R.string.hum));
 		Picasso.with(getActivity())
 				.load(ICON_URL
-						+ mJsonHandler.getString("icon", JSONWeather) + ".png")
-				.into(weatherIcon);
+						+ mJsonHandler.getStringArrey(jObj, "weather", "icon")
+						+ ".png").into(weatherIcon);
 
 	}
 
@@ -163,36 +141,13 @@ public class MainActivityFragment extends Fragment implements OnKeyListener, Loa
 
 		} else {
 
-			//new WeatherTask().execute();
+			new WeatherTask().execute();
 
 		}
 	}
 
 	public void showMessage(String message) {
 		Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-	}
-
-	@Override
-	public Loader<String> onCreateLoader(int id, Bundle args) {
-		Loader<String> loader = null;
-		if(id == LOADER_TIME_ID){
-			loader = new JsonLoader(this, args);
-		}		
-		return loader;
-	}
-	
-	
-
-	@Override
-	public void onLoadFinished(Loader<String> arg0, String arg1) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onLoaderReset(Loader<String> arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
