@@ -3,46 +3,23 @@ package com.example.weathermobile;
 import android.content.Context;
 import android.content.Loader;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.content.AsyncTaskLoader;
 
-public class JsonLoader extends Loader<String> {
+public class JsonLoader extends AsyncTaskLoader<String> {
 
-	private String nameCountry;
-	private GetJsonTask getGetJsonTask;
+	private String mNameCountry;
+	public final static String NAME_COUNTRY = "name_country";
 
-	public JsonLoader(Context context, String nameCountry) {
+	public JsonLoader(Context context, Bundle args) {
 		super(context);
-		this.nameCountry = nameCountry;
+		if (args != null);
+		mNameCountry = args.getString(NAME_COUNTRY);
 	}
 
 	@Override
-	protected void onStartLoading() {
-		super.onStartLoading();
+	public String loadInBackground() {
 
-	}
-
-	@Override
-	protected void onStopLoading() {
-		super.onStopLoading();
-
-	}
-
-	@Override
-	protected void onForceLoad() {
-		super.onForceLoad();
-		if (getGetJsonTask != null);
-		getGetJsonTask.cancel(true);
-		new GetJsonTask().execute();
-
-	}
-
-	class GetJsonTask extends AsyncTask<Void, Void, String> {
-
-		@Override
-		protected String doInBackground(Void... params) {
-
-			return new HttpClient().getWeatherData(nameCountry);
-
-		}
-
+		return new HttpClient().getWeatherData(mNameCountry);
 	}
 }

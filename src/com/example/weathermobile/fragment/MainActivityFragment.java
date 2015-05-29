@@ -7,37 +7,32 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.weathermobile.Constants;
 import com.example.weathermobile.HttpClient;
 import com.example.weathermobile.JsonHandler;
+import com.example.weathermobile.JsonLoader;
 import com.example.weathermobile.R;
-
 import com.squareup.picasso.Picasso;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.location.Location;
-import android.location.LocationListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnKeyListener;
-import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
 
 public class MainActivityFragment extends Fragment implements OnKeyListener, LoaderCallbacks<String> {
 
@@ -50,6 +45,10 @@ public class MainActivityFragment extends Fragment implements OnKeyListener, Loa
 	private String nameCountry;
 	private DecimalFormat dec = new DecimalFormat("0.00");
 	private JsonHandler mJsonHandler = new JsonHandler();
+	private static String ICON_URL = "http://openweathermap.org/img/w/";
+	static final int LOADER_TIME_ID = 1;
+	
+	
 
 	private class WeatherTask extends AsyncTask<Void, Void, String> {
 
@@ -89,7 +88,10 @@ public class MainActivityFragment extends Fragment implements OnKeyListener, Loa
 		countryName_TextView.setOnKeyListener(this);
 		humidity_TextView = (TextView) view
 				.findViewById(R.id.humidity_TextView);
-
+		
+		Bundle bndl = new Bundle();
+		bndl.putString(JsonLoader.NAME_COUNTRY, nameCountry);
+		getLoaderManager().initLoader(LOADER_TIME_ID, bndl, this);
 		return view;
 	}
 
@@ -119,7 +121,7 @@ public class MainActivityFragment extends Fragment implements OnKeyListener, Loa
 		humidity_TextView.setText(String.valueOf(mJsonHandler.getInt(
 				"humidity", mainObj)) + " " + getString(R.string.hum));
 		Picasso.with(getActivity())
-				.load("http://openweathermap.org/img/w/"
+				.load(ICON_URL
 						+ mJsonHandler.getString("icon", JSONWeather) + ".png")
 				.into(weatherIcon);
 
@@ -161,7 +163,7 @@ public class MainActivityFragment extends Fragment implements OnKeyListener, Loa
 
 		} else {
 
-			new WeatherTask().execute();
+			//new WeatherTask().execute();
 
 		}
 	}
@@ -171,10 +173,15 @@ public class MainActivityFragment extends Fragment implements OnKeyListener, Loa
 	}
 
 	@Override
-	public Loader<String> onCreateLoader(int arg0, Bundle arg1) {
-		// TODO Auto-generated method stub
-		return null;
+	public Loader<String> onCreateLoader(int id, Bundle args) {
+		Loader<String> loader = null;
+		if(id == LOADER_TIME_ID){
+			loader = new JsonLoader(this, args);
+		}		
+		return loader;
 	}
+	
+	
 
 	@Override
 	public void onLoadFinished(Loader<String> arg0, String arg1) {
