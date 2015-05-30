@@ -16,9 +16,9 @@
             android:id="@+id/countryName_TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:layout_marginTop="15dp"
             android:hint="@string/countryName_hint"
-            android:layout_marginTop="15dp" />
+            android:inputType="textPersonName" />
     </TableRow>
 
     <TableRow>
@@ -93,13 +93,11 @@
             android:layout_height="wrap_content" />
     </TableRow>
     
-    <FrameLayout
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" 
-        android:layout_marginLeft="@dimen/padding"
-        android:layout_marginRight="@dimen/padding"
-        android:layout_marginBottom="@dimen/padding" />
+    <Button
+            android:id="@+id/run_startButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/search" />
 
 </TableLayout>
