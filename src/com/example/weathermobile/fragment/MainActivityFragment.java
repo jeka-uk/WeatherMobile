@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.support.v4.content.Loader.ForceLoadContentObserver;
 import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -55,8 +56,6 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 			Bundle savedInstanceState) {
 	    		
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
-		
-		
 
 		mTempTextView = (TextView) view.findViewById(R.id.temp_TextView);
 		mPressureTextView = (TextView) view.findViewById(R.id.pressure_TextView);
@@ -74,7 +73,7 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
                 
                 mNameCountry = mCountryNameTextView.getText().toString();
                 isNetworkConnected();
-               // Log.v(LOG_TAG, mNameCountry);     
+               // Log.v(LOG_TAG, mNameCountry);   
                 
             }
         });
@@ -100,8 +99,9 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 			showMessage("No internet connection");
 
 		} else {
-		    //Log.v(LOG_TAG, mNameCountry);
+			
 		    getLoaderManager().initLoader(Constants.LOADER_TIME_ID, null, this).forceLoad();
+		    
 		}
 	}
 
@@ -119,19 +119,22 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 	}
 
 	@Override
+	
 	public void onLoadFinished(Loader<String> arg0, String strJson) {
-	//Log.v(LOG_TAG, strJson);
 		
 		try {
 			setData(new JSONObject(strJson));
 		} catch (JSONException e) {
 
 			e.printStackTrace();
-		}		
+		}
+		
+		getLoaderManager().restartLoader(Constants.LOADER_TIME_ID, null, this).forceLoad();				
 	}
 
 	@Override
 	public void onLoaderReset(Loader<String> arg0) {
-		
+				
 	}
+	
 }
