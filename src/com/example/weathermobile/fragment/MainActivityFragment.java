@@ -11,6 +11,8 @@ import com.example.weathermobile.JsonLoader;
 import com.example.weathermobile.R;
 import com.squareup.picasso.Picasso;
 
+import android.app.ActionBar;
+import android.app.SearchManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -53,7 +55,8 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+			Bundle savedInstanceState) {		
+		    setHasOptionsMenu(true);
 	    		
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -65,7 +68,6 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 		mHumidityTextView = (TextView) view.findViewById(R.id.humidity_TextView);
 		
 		mRun_startButton = (Button) view.findViewById(R.id.run_startButton);
-		
 		mRun_startButton.setOnClickListener(new OnClickListener() {
             
             @Override
@@ -135,6 +137,41 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 	@Override
 	public void onLoaderReset(Loader<String> arg0) {
 				
+	}	
+	
+	public void onCreateOptionsMenu(
+	      Menu menu, MenuInflater inflater) {
+	      inflater.inflate(R.menu.main, menu);
+	      
+	      SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+		  SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+		    if (null != searchView) {
+		        searchView.setSearchableInfo(searchManager
+		        .getSearchableInfo(getActivity().getComponentName()));
+		        searchView.setIconifiedByDefault(false);
+		    }
+
+		    SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+		        public boolean onQueryTextChange(String newText) {
+		            // this is your adapter that will be filtered
+		            return true;
+		        }
+
+		        public boolean onQueryTextSubmit(String query) {		        	
+		        	
+		        	 mNameCountry = query;
+		                isNetworkConnected();
+		        	
+					return false;
+		            //Here u can get the value "query" which is entered in the search box.
+		        }
+		    };
+		    
+		    searchView.setOnQueryTextListener(queryTextListener);
 	}
+	
+	
+	
+	
 	
 }

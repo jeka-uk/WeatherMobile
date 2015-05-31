@@ -27,9 +27,9 @@ public final class R {
         public static final int ic_search=0x7f020001;
     }
     public static final class id {
+        public static final int action_search=0x7f080008;
         public static final int container=0x7f080000;
         public static final int countryName_TextView=0x7f080001;
-        public static final int grid_default_search=0x7f080008;
         public static final int humidity_TextView=0x7f080006;
         public static final int pressure_TextView=0x7f080004;
         public static final int run_startButton=0x7f080007;
@@ -45,19 +45,20 @@ public final class R {
         public static final int main=0x7f070000;
     }
     public static final class string {
+        public static final int action_search=0x7f05000a;
         public static final int action_settings=0x7f050002;
         public static final int app_name=0x7f050000;
         public static final int countryName=0x7f050004;
         public static final int countryName_hint=0x7f050008;
-        public static final int grad=0x7f05000a;
+        public static final int grad=0x7f05000b;
         public static final int hello_world=0x7f050001;
-        public static final int hum=0x7f05000d;
+        public static final int hum=0x7f05000e;
         public static final int humidity=0x7f050007;
-        public static final int pres=0x7f05000b;
+        public static final int pres=0x7f05000c;
         public static final int pressure=0x7f050006;
         public static final int search=0x7f050009;
         public static final int temp=0x7f050003;
-        public static final int win=0x7f05000c;
+        public static final int win=0x7f05000d;
         public static final int wind=0x7f050005;
     }
     public static final class style {

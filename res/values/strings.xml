@@ -11,6 +11,7 @@
     <string name="humidity">Humidity:</string>
     <string name="countryName_hint">Input Country </string>
     <string name="search">Search</string>
+    <string name="action_search">Search country</string>
     
     <string name="grad">C</string>
     <string name="pres">hPa</string>
