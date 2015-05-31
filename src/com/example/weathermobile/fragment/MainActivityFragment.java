@@ -49,7 +49,6 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 	private EditText mCountryNameTextView;
 	private ImageView mWeatherIcon;
 	private String mNameCountry;
-	private Button mRun_startButton;
 	private DecimalFormat dec = new DecimalFormat("0.00");
 	private JsonHandler mJsonHandler = new JsonHandler();
 		
@@ -66,19 +65,6 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 		mWeatherIcon = (ImageView) view.findViewById(R.id.weatherIcon);
 		mCountryNameTextView = (EditText) view.findViewById(R.id.countryName_TextView);
 		mHumidityTextView = (TextView) view.findViewById(R.id.humidity_TextView);
-		
-		mRun_startButton = (Button) view.findViewById(R.id.run_startButton);
-		mRun_startButton.setOnClickListener(new OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                
-                mNameCountry = mCountryNameTextView.getText().toString();
-                isNetworkConnected();
-               // Log.v(LOG_TAG, mNameCountry);   
-                
-            }
-        });
 		
 		return view;
 	}
