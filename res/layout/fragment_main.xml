@@ -1,95 +1,15 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" >
-
-    <TableRow>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/padding"
-            android:layout_marginTop="15dp"
-            android:gravity="left"
-            android:text="@string/countryName" />
-
-        <EditText
-            android:id="@+id/countryName_TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:hint="@string/countryName_hint"
-            android:inputType="textPersonName" />
-    </TableRow>
-
-    <TableRow>
-
-        <ImageView
-            android:id="@+id/weatherIcon"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
-    </TableRow>
-
-    <TableRow>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/padding"
-            android:gravity="left"
-            android:paddingRight="5sp"
-            android:text="@string/temp" />
-
-        <TextView
-            android:id="@+id/temp_TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </TableRow>
-
-    <TableRow>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/padding"
-            android:gravity="left"
-            android:paddingRight="5sp"
-            android:text="@string/pressure" />
-
-        <TextView
-            android:id="@+id/pressure_TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </TableRow>
-
-    <TableRow>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/padding"
-            android:gravity="left"
-            android:paddingRight="5sp"
-            android:text="@string/wind" />
-
-        <TextView
-            android:id="@+id/wind_TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </TableRow>
-
-    <TableRow>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/padding"
-            android:gravity="left"
-            android:paddingRight="5sp"
-            android:text="@string/humidity" />
-
-        <TextView
-            android:id="@+id/humidity_TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </TableRow>
+    
+    <FrameLayout
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/padding" 
+        android:layout_marginLeft="@dimen/padding"
+        android:layout_marginRight="@dimen/padding"
+        android:layout_marginBottom="@dimen/padding" />
+    
 </TableLayout>
