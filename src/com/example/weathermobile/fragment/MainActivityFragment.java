@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import com.example.weathermobile.Constants;
 import com.example.weathermobile.JsonHandler;
 import com.example.weathermobile.JsonLoader;
+import com.example.weathermobile.LogicPart;
 import com.example.weathermobile.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,7 +45,7 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 
 	private static final String LOG_TAG = "myLogs";
 
-	private TextView mTempTextView, mPressureTextView, mWindTextView, mHumidityTextView;
+	private TextView mTempTextView, mPressureTextView, mWindTextView, mHumidityTextView, mNameCityTextView;
 	private ImageView mWeatherIcon;
 	private String mNameCity;
 	private DecimalFormat dec = new DecimalFormat("0.00");
@@ -53,6 +54,7 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 	private SearchView searchView;
 	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
+	private LogicPart mLogicPart = new LogicPart();
 		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,17 +64,6 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
 		
 		return view;
-	}
-
-	private void setData(JSONObject jObj) throws JSONException {
-
-		/*mTempTextView.setText(String.valueOf(dec.format(mJsonHandler.getDoubleSubObj(jObj, "main", "temp") - 273.15))+ " "+ getString(R.string.grad));
-		mWindTextView.setText(String.valueOf(mJsonHandler.getDoubleSubObj(jObj,"wind", "speed")) + " " + getString(R.string.win));
-		mPressureTextView.setText(String.valueOf(mJsonHandler.getDoubleSubObj(jObj, "main", "pressure")) + " " + getString(R.string.pres));
-		mHumidityTextView.setText(String.valueOf(mJsonHandler.getDoubleSubObj(jObj, "main", "humidity")) + " " + getString(R.string.hum));
-		Picasso.with(getActivity()).load(Constants.ICON_URL	+ mJsonHandler.getStringArrey(jObj, "weather", "icon")+ ".png").into(mWeatherIcon);*/
-		
-		
 	}
 
 	private void isNetworkConnected() {
@@ -105,8 +96,7 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 	public void onLoadFinished(Loader<String> arg0, String strJson){
 		
 		if(strJson != null){
-			try {
-				//setData(new JSONObject(strJson));
+			try {				
 				infoWindowAdapter(new JSONObject(strJson));
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -155,8 +145,8 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 		    };
 		    
 		    searchView.setOnQueryTextListener(queryTextListener);
-	}
-	
+	}	
+		
 	private void starGoogleMap() {
 
 		mapFragment = new SupportMapFragment() {
@@ -182,7 +172,14 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 	private void infoWindowAdapter(JSONObject jObj) throws JSONException{
 		
 		mCityLocation.setLatitude(mJsonHandler.getDoubleSubObj(jObj, "coord", "lat"));
-		mCityLocation.setLongitude(mJsonHandler.getDoubleSubObj(jObj, "coord", "lon"));		
+		mCityLocation.setLongitude(mJsonHandler.getDoubleSubObj(jObj, "coord", "lon"));
+		
+		
+		mLogicPart.setmTemp(String.valueOf(dec.format(mJsonHandler.getDoubleSubObj(jObj, "main", "temp")- 273.15)+ " "+ getString(R.string.grad)));
+		mLogicPart.setmWingSpeed(String.valueOf(mJsonHandler.getDoubleSubObj(jObj,"wind", "speed")) + " " + getString(R.string.win));
+		mLogicPart.setmHumidity(String.valueOf(mJsonHandler.getDoubleSubObj(jObj, "main", "humidity")) + " " + getString(R.string.hum));
+		mLogicPart.setmPressure(String.valueOf(mJsonHandler.getDoubleSubObj(jObj, "main", "pressure")) + " " + getString(R.string.pres));
+		mLogicPart.setmIconUrl(String.valueOf(mJsonHandler.getStringArrey(jObj, "weather", "icon")));
 		
 		CameraPosition position = CameraPosition.builder().bearing(mCityLocation.getBearing()).target(new LatLng(mCityLocation.getLatitude(),mCityLocation.getLongitude())).zoom(10).tilt(mGoogleMap.getCameraPosition().tilt).build();		
 		Marker melbourne = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(mCityLocation.getLatitude(),mCityLocation.getLongitude())));		
@@ -199,13 +196,21 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 				
 				View v = getActivity().getLayoutInflater().inflate(R.layout.fragment_information_weather, null);
 				
-				LatLng latLng = marker.getPosition();
 				mTempTextView = (TextView) v.findViewById(R.id.temp_TextView);
 				mPressureTextView = (TextView) v.findViewById(R.id.pressure_TextView);
 				mWindTextView = (TextView) v.findViewById(R.id.wind_TextView);
 				mWeatherIcon = (ImageView) v.findViewById(R.id.weatherIcon);
 				mHumidityTextView = (TextView) v.findViewById(R.id.humidity_TextView);
-				return v;				
+				mNameCityTextView = (TextView) v.findViewById(R.id.nameCity);
+				
+				mTempTextView.setText(mLogicPart.getmTemp());
+				mPressureTextView.setText(mLogicPart.getmPressure());
+				mWindTextView.setText(mLogicPart.getmWingSpeed());
+				mHumidityTextView.setText(mLogicPart.getmHumidity());
+				mNameCityTextView.setText(mLogicPart.getmNameCity());
+				Picasso.with(getActivity()).load(Constants.ICON_URL	+ mLogicPart.getmIconUrl() + ".png").into(mWeatherIcon);
+				
+				return v;
 			}
 		});
 		
