@@ -478,7 +478,7 @@ containing a value of this type.
         public static final int powered_by_google_light=0x7f020021;
     }
     public static final class id {
-        public static final int action_search=0x7f0b001a;
+        public static final int action_search=0x7f0b001c;
         public static final int adjust_height=0x7f0b0000;
         public static final int adjust_width=0x7f0b0001;
         public static final int book_now=0x7f0b0010;
@@ -492,7 +492,7 @@ containing a value of this type.
         public static final int holo_dark=0x7f0b0007;
         public static final int holo_light=0x7f0b0008;
         public static final int hybrid=0x7f0b0003;
-        public static final int map=0x7f0b0019;
+        public static final int map=0x7f0b001b;
         public static final int match_parent=0x7f0b000e;
         public static final int monochrome=0x7f0b0016;
         public static final int none=0x7f0b0002;
@@ -504,6 +504,8 @@ containing a value of this type.
         public static final int slide=0x7f0b0017;
         public static final int strict_sandbox=0x7f0b000b;
         public static final int terrain=0x7f0b0006;
+        public static final int tv_lat=0x7f0b0019;
+        public static final int tv_lng=0x7f0b001a;
         public static final int wrap_content=0x7f0b000f;
     }
     public static final class integer {
@@ -511,7 +513,8 @@ containing a value of this type.
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
-        public static final int fragment_main=0x7f030001;
+        public static final int fragment_information_weather=0x7f030001;
+        public static final int fragment_main=0x7f030002;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;

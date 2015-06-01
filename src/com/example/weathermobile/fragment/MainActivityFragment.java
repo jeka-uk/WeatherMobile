@@ -10,10 +10,14 @@ import com.example.weathermobile.JsonLoader;
 import com.example.weathermobile.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 
 import android.app.SearchManager;
@@ -75,10 +79,7 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 		mHumidityTextView.setText(String.valueOf(mJsonHandler.getDoubleSubObj(jObj, "main", "humidity")) + " " + getString(R.string.hum));
 		Picasso.with(getActivity()).load(Constants.ICON_URL	+ mJsonHandler.getStringArrey(jObj, "weather", "icon")+ ".png").into(mWeatherIcon);*/
 		
-		mCityLocation.setLatitude(mJsonHandler.getDoubleSubObj(jObj, "coord", "lat"));
-		mCityLocation.setLongitude(mJsonHandler.getDoubleSubObj(jObj, "coord", "lon"));
 		
-		movingCamera(mCityLocation);
 	}
 
 	private void isNetworkConnected() {
@@ -107,13 +108,13 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 		return loder;
 	}
 
-	@Override
-	
+	@Override	
 	public void onLoadFinished(Loader<String> arg0, String strJson){
 		
 		if(strJson != null){
 			try {
-				setData(new JSONObject(strJson));
+				//setData(new JSONObject(strJson));
+				infoWindowAdapter(new JSONObject(strJson));
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -163,10 +164,9 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 		    searchView.setOnQueryTextListener(queryTextListener);
 	}
 	
-	public void starGoogleMap() {
+	private void starGoogleMap() {
 
 		mapFragment = new SupportMapFragment() {
-
 			@Override
 			public void onActivityCreated(Bundle savedInstanceState) {
 				super.onActivityCreated(savedInstanceState);
@@ -176,7 +176,6 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 
 					UiSettings uiSettings = mGoogleMap.getUiSettings();
 					uiSettings.setZoomControlsEnabled(true);
-					mGoogleMap.setMyLocationEnabled(true);
 					CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(48.761043, 30.230563)).zoom(3).build();
 					mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 				}
@@ -185,12 +184,39 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 
 		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
 		transaction.replace(R.id.map, mapFragment).addToBackStack(null).commit();
-	}
-	
-	public void movingCamera(Location location) {
-
-		CameraPosition position = CameraPosition.builder().bearing(location.getBearing()).target(new LatLng(location.getLatitude(),location.getLongitude()))
-				.zoom(10).tilt(mGoogleMap.getCameraPosition().tilt).build();
+	}	
+		
+	private void infoWindowAdapter(JSONObject jObj) throws JSONException{
+		
+		mCityLocation.setLatitude(mJsonHandler.getDoubleSubObj(jObj, "coord", "lat"));
+		mCityLocation.setLongitude(mJsonHandler.getDoubleSubObj(jObj, "coord", "lon"));		
+		
+		CameraPosition position = CameraPosition.builder().bearing(mCityLocation.getBearing()).target(new LatLng(mCityLocation.getLatitude(),mCityLocation.getLongitude())).zoom(10).tilt(mGoogleMap.getCameraPosition().tilt).build();		
+		Marker melbourne = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(mCityLocation.getLatitude(),mCityLocation.getLongitude())));		
+		
+		mGoogleMap.setInfoWindowAdapter(new InfoWindowAdapter() {
+			
+			@Override
+			public View getInfoWindow(Marker marker) {
+				return null;
+			}
+			
+			@Override
+			public View getInfoContents(Marker marker) {
+				
+				View v = getActivity().getLayoutInflater().inflate(R.layout.fragment_information_weather, null);
+				
+				LatLng latLng = marker.getPosition();
+				TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
+				TextView tvLng = (TextView) v.findViewById(R.id.tv_lng);
+				tvLat.setText("Latitude:" + latLng.latitude);
+			    tvLng.setText("Longitude:"+ latLng.longitude);
+			    
+				return v;				
+			}
+		});	
+		
+		melbourne.showInfoWindow();
 		mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
 	}
 }

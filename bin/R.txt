@@ -100,7 +100,7 @@ int drawable ic_plusone_tall_off_client 0x7f02001e
 int drawable ic_search 0x7f02001f
 int drawable powered_by_google_dark 0x7f020020
 int drawable powered_by_google_light 0x7f020021
-int id action_search 0x7f0b001a
+int id action_search 0x7f0b001c
 int id adjust_height 0x7f0b0000
 int id adjust_width 0x7f0b0001
 int id book_now 0x7f0b0010
@@ -114,7 +114,7 @@ int id grayscale 0x7f0b0015
 int id holo_dark 0x7f0b0007
 int id holo_light 0x7f0b0008
 int id hybrid 0x7f0b0003
-int id map 0x7f0b0019
+int id map 0x7f0b001b
 int id match_parent 0x7f0b000e
 int id monochrome 0x7f0b0016
 int id none 0x7f0b0002
@@ -126,10 +126,13 @@ int id selectionDetails 0x7f0b000d
 int id slide 0x7f0b0017
 int id strict_sandbox 0x7f0b000b
 int id terrain 0x7f0b0006
+int id tv_lat 0x7f0b0019
+int id tv_lng 0x7f0b001a
 int id wrap_content 0x7f0b000f
 int integer google_play_services_version 0x7f080000
 int layout activity_main 0x7f030000
-int layout fragment_main 0x7f030001
+int layout fragment_information_weather 0x7f030001
+int layout fragment_main 0x7f030002
 int menu main 0x7f0a0000
 int raw gtm_analytics 0x7f040000
 int string accept 0x7f060002
