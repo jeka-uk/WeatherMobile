@@ -60,14 +60,7 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 		    setHasOptionsMenu(true);
 	    		
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
-
-		/*mTempTextView = (TextView) view.findViewById(R.id.temp_TextView);
-		mPressureTextView = (TextView) view.findViewById(R.id.pressure_TextView);
-		mWindTextView = (TextView) view.findViewById(R.id.wind_TextView);
-		mWeatherIcon = (ImageView) view.findViewById(R.id.weatherIcon);
-		mHumidityTextView = (TextView) view.findViewById(R.id.humidity_TextView);*/
 		
-				
 		return view;
 	}
 
@@ -207,14 +200,14 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 				View v = getActivity().getLayoutInflater().inflate(R.layout.fragment_information_weather, null);
 				
 				LatLng latLng = marker.getPosition();
-				TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
-				TextView tvLng = (TextView) v.findViewById(R.id.tv_lng);
-				tvLat.setText("Latitude:" + latLng.latitude);
-			    tvLng.setText("Longitude:"+ latLng.longitude);
-			    
+				mTempTextView = (TextView) v.findViewById(R.id.temp_TextView);
+				mPressureTextView = (TextView) v.findViewById(R.id.pressure_TextView);
+				mWindTextView = (TextView) v.findViewById(R.id.wind_TextView);
+				mWeatherIcon = (ImageView) v.findViewById(R.id.weatherIcon);
+				mHumidityTextView = (TextView) v.findViewById(R.id.humidity_TextView);
 				return v;				
 			}
-		});	
+		});
 		
 		melbourne.showInfoWindow();
 		mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
