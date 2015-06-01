@@ -17,8 +17,6 @@ public class JsonLoader extends AsyncTaskLoader<String> {
 
 	@Override
 	public String loadInBackground() {
-		
-	//	Log.v(LOG_TAG, mNameCountry);
 
 		return new HttpClient().getWeatherData(mNameCountry);
 	}

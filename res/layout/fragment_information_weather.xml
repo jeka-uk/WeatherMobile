@@ -2,7 +2,7 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    
+
     <TableRow>
 
         <TextView
@@ -10,11 +10,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/padding"
-            android:layout_marginTop="5dp"
-            android:gravity="center_horizontal"
-            android:text="@string/countryName" />
-
-       
+            android:layout_marginTop="3dp"
+            android:gravity="center"
+            android:text="@string/countryName"
+            android:textSize="20dip"
+            android:textStyle="bold" />
     </TableRow>
 
     <TableRow>
@@ -33,7 +33,9 @@
             android:layout_marginLeft="@dimen/padding"
             android:gravity="left"
             android:paddingRight="5sp"
-            android:text="@string/temp" />
+            android:text="@string/temp"
+            android:textSize="15dip"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/temp_TextView"
@@ -49,7 +51,9 @@
             android:layout_marginLeft="@dimen/padding"
             android:gravity="left"
             android:paddingRight="5sp"
-            android:text="@string/pressure" />
+            android:text="@string/pressure"
+            android:textSize="15dip"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/pressure_TextView"
@@ -65,7 +69,9 @@
             android:layout_marginLeft="@dimen/padding"
             android:gravity="left"
             android:paddingRight="5sp"
-            android:text="@string/wind" />
+            android:text="@string/wind"
+            android:textSize="15dip"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/wind_TextView"
@@ -81,13 +87,14 @@
             android:layout_marginLeft="@dimen/padding"
             android:gravity="left"
             android:paddingRight="5sp"
-            android:text="@string/humidity" />
+            android:text="@string/humidity"
+            android:textSize="15dip"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/humidity_TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </TableRow>
-    
 
 </TableLayout>

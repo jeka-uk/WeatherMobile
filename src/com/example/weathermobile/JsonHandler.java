@@ -28,5 +28,12 @@ public class JsonHandler {
 
 		return result;
 	}
+	
+	public String getStringleObj(JSONObject jObj, String key)	throws JSONException {
+
+		String result = jObj.getString(key);
+
+		return result;
+	}
 
 }

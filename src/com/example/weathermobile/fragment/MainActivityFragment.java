@@ -172,14 +172,13 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 	private void infoWindowAdapter(JSONObject jObj) throws JSONException{
 		
 		mCityLocation.setLatitude(mJsonHandler.getDoubleSubObj(jObj, "coord", "lat"));
-		mCityLocation.setLongitude(mJsonHandler.getDoubleSubObj(jObj, "coord", "lon"));
-		
-		
+		mCityLocation.setLongitude(mJsonHandler.getDoubleSubObj(jObj, "coord", "lon"));		
 		mLogicPart.setmTemp(String.valueOf(dec.format(mJsonHandler.getDoubleSubObj(jObj, "main", "temp")- 273.15)+ " "+ getString(R.string.grad)));
 		mLogicPart.setmWingSpeed(String.valueOf(mJsonHandler.getDoubleSubObj(jObj,"wind", "speed")) + " " + getString(R.string.win));
 		mLogicPart.setmHumidity(String.valueOf(mJsonHandler.getDoubleSubObj(jObj, "main", "humidity")) + " " + getString(R.string.hum));
 		mLogicPart.setmPressure(String.valueOf(mJsonHandler.getDoubleSubObj(jObj, "main", "pressure")) + " " + getString(R.string.pres));
 		mLogicPart.setmIconUrl(String.valueOf(mJsonHandler.getStringArrey(jObj, "weather", "icon")));
+		mLogicPart.setmNameCity(mJsonHandler.getStringleObj(jObj, "name"));
 		
 		CameraPosition position = CameraPosition.builder().bearing(mCityLocation.getBearing()).target(new LatLng(mCityLocation.getLatitude(),mCityLocation.getLongitude())).zoom(10).tilt(mGoogleMap.getCameraPosition().tilt).build();		
 		Marker melbourne = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(mCityLocation.getLatitude(),mCityLocation.getLongitude())));		
