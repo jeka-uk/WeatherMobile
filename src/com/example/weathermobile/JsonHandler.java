@@ -14,6 +14,13 @@ public class JsonHandler {
 
 		return result;
 	}
+	
+	public String getStringSubObj(JSONObject jObj, String namesubObj, String key)throws JSONException {
+
+		String result = jObj.getJSONObject(namesubObj).getString(key);
+
+		return result;
+	}
 
 	public String getStringArrey(JSONObject jObj, String nameArrey, String key)throws JSONException {
 
