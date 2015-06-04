@@ -8,12 +8,14 @@ import com.example.weathermobile.Constants;
 import com.example.weathermobile.JsonHandler;
 import com.example.weathermobile.JsonLoader;
 import com.example.weathermobile.R;
+import com.google.android.gms.internal.bn;
+import com.google.android.gms.internal.gm;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -27,7 +29,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.util.Log;
@@ -41,7 +42,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivityFragment extends Fragment implements LoaderCallbacks<String> {
+public class MainActivityFragment extends Fragment implements LoaderCallbacks<String>, OnMapReadyCallback {
 
 	private static final String LOG_TAG = "myLogs";
 
@@ -52,33 +53,39 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 	private JsonHandler mJsonHandler = new JsonHandler();
 	private Location mCityLocation = new Location("city location");
 	private SearchView searchView;
-	private SupportMapFragment mapFragment;
 	private GoogleMap mGoogleMap;
-	private JSONObject mJSONObject;
-			
+	private JSONObject mJSONObject;	
+	private boolean res = false;
+				
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {		
-		    setHasOptionsMenu(true);		    
-		    setRetainInstance(true);
+		    setHasOptionsMenu(true);
 	    		
 		View view = inflater.inflate(R.layout.fragment_main, container, false);
 		
 		return view;
 	}
+	
+	private void startLoder(){
+	    
+	    getLoaderManager().initLoader(Constants.LOADER_TIME_ID, null, this).forceLoad();   
+	    
+	}
 
-	private void isNetworkConnected() {
-		
+	private boolean isNetworkConnected() {
+	    
 		ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo mNinfo = cm.getActiveNetworkInfo();
 		
 		if (mNinfo == null) {
-			
-			showMessage("No internet connection");
+		    
+			showMessage("No internet connection");			
+			return false;
 
 		} else {
-			
-		    getLoaderManager().initLoader(Constants.LOADER_TIME_ID, null, this).forceLoad();		    
+		    
+		    return true;		    
 		}
 	}
 
@@ -97,6 +104,7 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 	public void onLoadFinished(Loader<String> arg0, String strJson){
 		
 		if(strJson != null){
+		    
 			try {	  
 			    
 			    mStrJson = strJson;		
@@ -108,7 +116,7 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 			}
 		}
 		
-		getLoaderManager().destroyLoader(Constants.LOADER_TIME_ID);				
+		getLoaderManager().destroyLoader(Constants.LOADER_TIME_ID);		
 	}
 	
 	@Override
@@ -117,6 +125,7 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 	}	
 	
 	public void onCreateOptionsMenu(
+	        
 	      Menu menu, MenuInflater inflater) {
 	      inflater.inflate(R.menu.main, menu);
 	      
@@ -135,10 +144,15 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 		            return true;
 		        }
 
-		        public boolean onQueryTextSubmit(String query) {		        	
-		        		mNameCity = query;
-		                isNetworkConnected();
-		                searchView.clearFocus();
+		        public boolean onQueryTextSubmit(String query) {
+		           	            
+		            if(isNetworkConnected() == true || query != null ){
+		                
+		                mNameCity = query;
+		                startLoder();
+                        searchView.clearFocus();
+		            }
+		            
 					return true;
 		        }
 		    };
@@ -147,36 +161,24 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 	}	
 		
 	private void starGoogleMap() {
-
-		mapFragment = new SupportMapFragment() {
-			@Override
-			public void onActivityCreated(Bundle savedInstanceState) {
-				super.onActivityCreated(savedInstanceState);
-				
-				mGoogleMap = mapFragment.getMap();
-				if (mGoogleMap != null) {
-
-					UiSettings uiSettings = mGoogleMap.getUiSettings();
-					uiSettings.setZoomControlsEnabled(true);
-					CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(48.761043, 30.230563)).zoom(3).build();
-					mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-				}
-			}
-		};
-
-		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-		transaction.replace(R.id.map, mapFragment).addToBackStack(null).commit();
+	    
+	    MapFragment mapFragment = (MapFragment) getActivity().getFragmentManager()
+	            .findFragmentById(R.id.map);
+	        mapFragment.getMapAsync(this);
 	}	
 		
-	private void infoWindowAdapter() throws JSONException{
-		
+	private void infoWindowAdapter() throws JSONException{	    
+        
+        mGoogleMap.clear();
+        
+        
 		mCityLocation.setLatitude(mJsonHandler.getDoubleSubObj(mJSONObject, "coord", "lat"));
 		mCityLocation.setLongitude(mJsonHandler.getDoubleSubObj(mJSONObject, "coord", "lon"));
 		
 		CameraPosition position = CameraPosition.builder().bearing(mCityLocation.getBearing()).target(new LatLng(mCityLocation.getLatitude(),mCityLocation.getLongitude())).zoom(10).tilt(mGoogleMap.getCameraPosition().tilt).build();		
 		Marker melbourne = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(mCityLocation.getLatitude(),mCityLocation.getLongitude())));
 		melbourne.showInfoWindow();
-		
+				
 		mGoogleMap.setInfoWindowAdapter(new InfoWindowAdapter() {
 			
 			@Override
@@ -216,25 +218,35 @@ public class MainActivityFragment extends Fragment implements LoaderCallbacks<St
 			}
 		});
 		mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
-		//melbourne.showInfoWindow();
 	}
    
     @Override
     public void onResume() {
         super.onResume();
-        
-        if (mStrJson != null) {
-            
-            getLoaderManager().initLoader(Constants.LOADER_TIME_ID, null, this).forceLoad();            
-        }
-
         starGoogleMap();
+        
+        Log.d(LOG_TAG, "res: " + res);
+        
+    }
+    
+    
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        
+        res = true;
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onMapReady(GoogleMap googleMap) {
         
-        getLoaderManager().destroyLoader(Constants.LOADER_TIME_ID);
-    }	
+        if(googleMap != null){
+            mGoogleMap = googleMap;
+            UiSettings uiSettings = mGoogleMap.getUiSettings();
+            uiSettings.setZoomControlsEnabled(true);
+        }
+        
+    }
+    
 }
