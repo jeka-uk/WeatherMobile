@@ -12,12 +12,11 @@
     <string name="countryName_hint">Input Country </string>
     <string name="search">Search</string>
     <string name="action_search">Search country</string>
-    
     <string name="grad">C</string>
     <string name="pres">hPa</string>
     <string name="win">mps</string>
     <string name="hum">%</string>
-    
-    
+    <string name="mainactivityfragment_network">No internet connection</string>
+    <string name="mainactivityfragment_cityname">City Name</string>
 
 </resources>

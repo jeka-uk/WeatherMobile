@@ -2,7 +2,7 @@ package com.example.weathermobile;
 
 
 
-import com.example.weathermobile.fragment.MainActivityFragment;
+import com.example.weathermobile.ui.MainActivityFragment;
 
 import android.app.Activity;
 import android.os.Bundle;
